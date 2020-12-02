@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="feather_menu" width="19" height="16" data-name="feather / menu" viewBox="0 0 19 16">
+    <defs>
+        <clipPath id="clip-path">
+            <path id="Combined_Shape" d="M.5 16a.5.5 0 1 1 0-1h18a.5.5 0 0 1 0 1zm0-7.5a.5.5 0 1 1 0-1h18a.5.5 0 0 1 0 1zM.5 1a.5.5 0 1 1 0-1h18a.5.5 0 0 1 0 1z" class="cls-1" data-name="Combined Shape" transform="translate(2.5 4)"/>
+        </clipPath>
+        <style>
+            .cls-1{fill:#000}
+        </style>
+    </defs>
+    <g id="그룹_33" data-name="그룹 33" transform="translate(-2.5 -4)">
+        <g id="그룹_33-2" clip-path="url(#clip-path)" data-name="그룹 33">
+            <g id="COLOR_black" data-name="COLOR/ black">
+                <path id="Rectangle" d="M0 0H24V24H0z" class="cls-1"/>
+            </g>
+        </g>
+    </g>
+</svg>
