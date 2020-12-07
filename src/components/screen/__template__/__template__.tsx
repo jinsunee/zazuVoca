@@ -1,6 +1,6 @@
-import React, {ReactElement} from 'react';
+import React, { ReactElement } from 'react';
 
-import {RootStackNavigationProps} from '../navigation/RootStackNavigator';
+import { RootStackNavigationProps } from '../navigation/RootStackNavigator';
 import styled from 'styled-components/native';
 
 const Container = styled.View`

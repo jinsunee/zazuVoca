@@ -43,12 +43,11 @@ const Header = styled.View`
 const BackButton = styled.TouchableOpacity`
   position: absolute;
   left: 0;
-  padding: 20px;
+  padding: 15px;
   justify-content: center;
 `;
 
 const VocaTitleButton = styled.TouchableOpacity`
-  /* height: 60px; */
   flex-direction: row;
   align-items: center;
 `;
@@ -62,7 +61,7 @@ const VocaTitleText = styled.Text`
 
 const InputVocaWrapper = styled.View`
   width: 100%;
-  padding: 20px;
+  padding: 20px 15px 10px 15px;
   border-bottom-width: 1px;
   border-bottom-color: ${colors.lightGray5};
   flex-direction: row;
@@ -70,9 +69,17 @@ const InputVocaWrapper = styled.View`
 `;
 
 const InputVoca = styled.TextInput`
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
   color: ${colors.light};
+`;
+
+const SearchButton = styled.TouchableOpacity`
+  position: absolute;
+  right: 0;
+  padding: 15px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ResultItem = styled.TouchableOpacity`
@@ -298,34 +305,13 @@ function AddVoca(): ReactElement {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
+  const requestSearching = async () => {
     if (inputVoca) {
-      setTimeout(() => {
-        setSearching(inputVoca);
-      }, 1500);
-      setSearching('');
-      return;
+      setLoading(true);
+      await request(inputVoca);
+      setLoading(false);
     }
-
-    setInputResults(null);
-    setSelecteResultItems(null);
-  }, [inputVoca]);
-
-  const fetch = async (input: string) => {
-    setLoading(true);
-    await request(input);
-    setLoading(false);
-    setSearching('');
   };
-
-  const [searching, setSearching] = useState<string>();
-
-  useEffect(() => {
-    if (!loading && searching) {
-      fetch(searching);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, searching]);
 
   const goToBack = (): void => {
     if (navigation) {
@@ -368,21 +354,22 @@ function AddVoca(): ReactElement {
   const renderInputVoca = (): ReactElement => {
     return (
       <InputVocaWrapper>
-        <SvgSearch />
         <InputVoca
-          multiline={true}
           value={inputVoca}
           onChangeText={(text) => setInputVoca(text.toLowerCase())}
           placeholder={'단어를 입력해주세요 :)'}
           placeholderTextColor={colors.lightGray5}
           style={{
-            marginLeft: 10,
             flex: 1,
             fontSize: 20,
             paddingTop: 0,
             paddingBottom: 0,
           }}
+          onSubmitEditing={requestSearching}
         />
+        <SearchButton onPress={requestSearching}>
+          <SvgSearch />
+        </SearchButton>
       </InputVocaWrapper>
     );
   };
@@ -427,10 +414,8 @@ function AddVoca(): ReactElement {
         onPress={async () => {
           setLoadingAddVoca(true);
 
-          setTimeout(() => {
-            setLoadingAddVoca(false);
-            addVoca();
-          }, 1500);
+          setLoadingAddVoca(false);
+          addVoca();
         }}
         style={{ paddingTop: 20, paddingBottom: insets.bottom + 20 }}
       >
@@ -477,7 +462,7 @@ function AddVoca(): ReactElement {
     );
   }
 
-  if (!inputVoca) {
+  if (!inputVoca || (inputVoca && !inputResults)) {
     return (
       <Container
         style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
@@ -506,7 +491,7 @@ function AddVoca(): ReactElement {
     );
   }
 
-  if (inputVoca && !inputResults) {
+  if (!inputResults) {
     return (
       <Container
         style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}

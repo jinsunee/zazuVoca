@@ -1,4 +1,4 @@
-import { Animated, PanResponder, Pressable } from 'react-native';
+import { Animated, PanResponder, Pressable, View } from 'react-native';
 import React, { ReactElement, useMemo, useState } from 'react';
 
 import { ItemType } from '../../types';
@@ -37,15 +37,7 @@ interface Props {
   setIsPress: (isPress: boolean) => void;
 }
 
-const SWIPE_THRESHOLD = 0.2 * screenWidth;
-// const SWIPE_OUT_DURATION = 250;
-
-// enum SwipeType {
-//   LEFT = 'left',
-//   RIGHT = 'right',
-//   TOP = 'top',
-//   BOTTOM = 'bottom',
-// }
+const SWIPE_THRESHOLD = 5;
 
 function Card(props: Props): ReactElement {
   const {
@@ -56,35 +48,64 @@ function Card(props: Props): ReactElement {
     setCurrentCardIndex,
   } = props;
 
-  const _panResponder = useMemo(
-    () =>
-      PanResponder.create({
-        onStartShouldSetPanResponder: () => true,
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderRelease: (evt, gesture) => {
-          if (gesture.dx > SWIPE_THRESHOLD) {
-            setIsPress(false);
-            setCurrentCardIndex((prev: number): number => {
-              if (prev === 0) {
-                return 0;
-              }
+  const panResponder = React.useRef(
+    PanResponder.create({
+      // Ask to be the responder:
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
-              return prev - 1;
-            });
-          } else if (gesture.dx < -SWIPE_THRESHOLD) {
-            setIsPress(false);
-            setCurrentCardIndex((prev: number): number => {
-              if (prev >= (data?.length || 0) - 1) {
-                return (data?.length || 0) - 1;
-              }
+      onPanResponderGrant: (evt, gestureState) => {
+        // The gesture has started. Show visual feedback so the user knows
+        // what is happening!
+        // gestureState.d{x,y} will be set to zero now
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        // The most recent move distance is gestureState.move{X,Y}
+        // The accumulated gesture distance since becoming responder is
+        // gestureState.d{x,y}
+      },
+      onPanResponderTerminationRequest: (evt, gestureState) => true,
+      onPanResponderRelease: (evt, gestureState) => {
+        // The user has released all touches while this view is the
+        // responder. This typically means a gesture has succeeded
+        if (
+          gestureState.dx < SWIPE_THRESHOLD &&
+          gestureState.dx > -SWIPE_THRESHOLD
+        ) {
+          setIsPress(true);
+        } else if (gestureState.dx > SWIPE_THRESHOLD) {
+          setIsPress(false);
+          setCurrentCardIndex((prev: number): number => {
+            if (prev === 0) {
+              return 0;
+            }
 
-              return prev + 1;
-            });
-          }
-        },
-      }),
-    [],
-  );
+            return prev - 1;
+          });
+        } else if (gestureState.dx < -SWIPE_THRESHOLD) {
+          setIsPress(false);
+          setCurrentCardIndex((prev: number): number => {
+            if (prev >= (data?.length || 0) - 1) {
+              return (data?.length || 0) - 1;
+            }
+
+            return prev + 1;
+          });
+        }
+      },
+      onPanResponderTerminate: (evt, gestureState) => {
+        // Another component has become the responder, so this gesture
+        // should be cancelled
+      },
+      onShouldBlockNativeResponder: (evt, gestureState) => {
+        // Returns whether this component should block native components from becoming the JS
+        // responder. Returns true by default. Is currently only supported on android.
+        return true;
+      },
+    }),
+  ).current;
 
   const renderCard = (item: ItemType, index: number): ReactElement => {
     if (isPress) {
@@ -100,19 +121,16 @@ function Card(props: Props): ReactElement {
     }
 
     return (
-      <CardWrapper onPress={(): void => setIsPress(true)}>
+      <CardWrapper>
         <CardVocaText>{item.front}</CardVocaText>
       </CardWrapper>
     );
   };
 
   return (
-    <Animated.View
-      {..._panResponder.panHandlers}
-      key={`item__${currentCardIndex}`}
-    >
+    <View {...panResponder.panHandlers} key={`item__${currentCardIndex}`}>
       {data ? renderCard(data[currentCardIndex], 0) : null}
-    </Animated.View>
+    </View>
   );
 }
 

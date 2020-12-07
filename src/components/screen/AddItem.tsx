@@ -215,7 +215,6 @@ function AddVoca(): ReactElement {
                 placeholderTextColor={colors.lightGray5}
               />
             </InputWrapper>
-
             <MeaningText>뜻</MeaningText>
             {renderInputList()}
             <AddMeaningButton onPress={addMeaningItem}>

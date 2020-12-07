@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/stack';
 
 import AddItem from '../screen/AddItem';
+import Auth from '../screen/Auth';
 import Main from '../screen/Main';
 import Notebook from '../screen/Notebook';
 import { Platform } from 'react-native';
@@ -31,6 +32,7 @@ export type StackParamList = {
     notebookUID: string;
     item: ItemType;
   };
+  Auth: undefined;
 };
 
 export type StackNavigationProps<
@@ -86,6 +88,14 @@ function MainStackNavigator(): React.ReactElement {
         name="UpdateItem"
         component={UpdateItem}
         options={platformAnimation}
+      />
+      <Stack.Screen
+        name="Auth"
+        component={Auth}
+        options={(): StackNavigationOptions => ({
+          headerShown: false,
+          ...TransitionPresets.SlideFromRightIOS,
+        })}
       />
     </Stack.Navigator>
   );

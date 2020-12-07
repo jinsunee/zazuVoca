@@ -111,7 +111,7 @@ function Main(): ReactElement {
     <Container style={{ paddingTop: insets.top }}>
       <Header>
         <HeaderUserWrapper>
-          <UserButton>
+          <UserButton onPress={() => goToOther('Auth')}>
             <SvgNoUser />
           </UserButton>
         </HeaderUserWrapper>

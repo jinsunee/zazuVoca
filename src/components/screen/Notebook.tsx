@@ -33,7 +33,7 @@ const Header = styled.View`
 const BackButton = styled.TouchableOpacity`
   position: absolute;
   left: 0;
-  padding: 20px;
+  padding: 20px 15px;
   justify-content: center;
   align-items: center;
 `;
@@ -41,7 +41,7 @@ const BackButton = styled.TouchableOpacity`
 const MoreButton = styled.TouchableOpacity`
   position: absolute;
   right: 0;
-  padding: 20px;
+  padding: 20px 15px;
   justify-content: center;
   align-items: center;
 `;
@@ -49,7 +49,7 @@ const MoreButton = styled.TouchableOpacity`
 const TitleWrapper = styled.View`
   justify-content: center;
   align-items: center;
-  padding: 18px;
+  padding: 20px;
 `;
 
 const TitleText = styled.Text`
@@ -60,7 +60,7 @@ const TitleText = styled.Text`
 
 const PlainVerticalWrapper = styled(Pressable)`
   width: 100%;
-  padding: 20px 0;
+  padding: 15px 0;
   flex-direction: row;
   align-items: center;
   border-bottom-width: 1px;
@@ -70,7 +70,6 @@ const PlainVerticalWrapper = styled(Pressable)`
 const PlainVerticalVocaTextWrapper = styled.View`
   width: 150px;
   height: 100%;
-  /* background-color: red; */
 `;
 
 const PlainVerticalVocaText = styled.Text`
@@ -295,8 +294,8 @@ function Notebook(): ReactElement {
               );
             }}
             contentContainerStyle={{
-              padding: 20,
-              paddingBottom: insets.bottom + 60,
+              padding: 15,
+              paddingBottom: insets.bottom + 160,
             }}
           />
         </View>
