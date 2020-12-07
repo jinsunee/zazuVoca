@@ -1,5 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import { Keyboard, TouchableWithoutFeedback } from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React, { ReactElement, useState } from 'react';
 
 import { ActivityIndicator } from 'react-native-paper';
@@ -84,7 +90,7 @@ const InputWrapper = styled.View`
 `;
 
 const Input = styled.TextInput`
-  font-size: 14px;
+  font-size: 17px;
   font-weight: bold;
   color: ${colors.light};
 `;
@@ -156,49 +162,52 @@ function EditCollectionModal(props: Props): ReactElement {
       isVisible={showModal}
       onBackdropPress={cancel}
       style={{
-        justifyContent: 'flex-start',
         margin: 0,
         padding: 20,
-        paddingTop: 300,
       }}
     >
-      <TouchableWithoutFeedback onPress={(): void => Keyboard.dismiss()}>
-        <Container>
-          <Header>
-            <CloseButton onPress={pressCancel}>
-              <SvgClose />
-            </CloseButton>
-            <HeaderTitle>단어장 추가</HeaderTitle>
-          </Header>
-          <Wrapper>
-            <Title>단어장 이름</Title>
-            <InputWrapper>
-              <Input
-                multiline={true}
-                value={vocaListTitle}
-                onChangeText={(text) => setVocaListTitle(text)}
-                placeholder={'추가할 단어장 이름을 입력해주세요 :)'}
-                placeholderTextColor={colors.lightGray5}
-              />
-            </InputWrapper>
-            <WarningWrapper>
-              {warning ? <WarningText>{warning}</WarningText> : null}
-            </WarningWrapper>
-          </Wrapper>
-          <BottomWrapper>
-            <BottomButton onPress={pressCancel}>
-              <BottomButtonCancelText>취소</BottomButtonCancelText>
-            </BottomButton>
-            <BottomButton onPress={pressComplete}>
-              {loading ? (
-                <ActivityIndicator size={14} color={colors.primary} />
-              ) : (
-                <BottomButtonCompleteText>완료</BottomButtonCompleteText>
-              )}
-            </BottomButton>
-          </BottomWrapper>
-        </Container>
-      </TouchableWithoutFeedback>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1, justifyContent: 'center' }}
+      >
+        <TouchableWithoutFeedback onPress={(): void => Keyboard.dismiss()}>
+          <Container>
+            <Header>
+              <CloseButton onPress={pressCancel}>
+                <SvgClose />
+              </CloseButton>
+              <HeaderTitle>단어장 추가</HeaderTitle>
+            </Header>
+            <Wrapper>
+              <Title>단어장 이름</Title>
+              <InputWrapper>
+                <Input
+                  multiline={true}
+                  value={vocaListTitle}
+                  onChangeText={(text) => setVocaListTitle(text)}
+                  placeholder={'추가할 단어장 이름을 입력해주세요 :)'}
+                  placeholderTextColor={colors.lightGray5}
+                />
+              </InputWrapper>
+              <WarningWrapper>
+                {warning ? <WarningText>{warning}</WarningText> : null}
+              </WarningWrapper>
+            </Wrapper>
+            <BottomWrapper>
+              <BottomButton onPress={pressCancel}>
+                <BottomButtonCancelText>취소</BottomButtonCancelText>
+              </BottomButton>
+              <BottomButton onPress={pressComplete}>
+                {loading ? (
+                  <ActivityIndicator size={14} color={colors.primary} />
+                ) : (
+                  <BottomButtonCompleteText>완료</BottomButtonCompleteText>
+                )}
+              </BottomButton>
+            </BottomWrapper>
+          </Container>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

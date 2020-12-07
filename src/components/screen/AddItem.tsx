@@ -4,6 +4,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SvgBack, SvgPlusVocaListButton } from '../../utils/Icons';
 
 import { ActivityIndicator } from 'react-native-paper';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackParamList } from '../navigation/MainStackNavigator';
 import { colors } from '../../theme';
 import { insertItem } from '../../apis/insert';
@@ -19,6 +20,7 @@ const Container = styled.View`
 const Header = styled.View`
   width: 100%;
   align-items: center;
+  background-color: ${colors.backgroundColorDark};
 `;
 
 const BackButton = styled.TouchableOpacity`
@@ -61,17 +63,17 @@ const MeaningText = styled.Text`
 `;
 
 const InputWrapper = styled.View`
-  padding: 10px 0;
   border-bottom-width: 1px;
   border-bottom-color: ${colors.lightGray5};
   margin: 10px 0;
 `;
 
 const Input = styled.TextInput`
-  font-size: 14px;
+  font-size: 17px;
   font-weight: bold;
   color: ${colors.light};
-  margin-left: 20px;
+  margin: 0 20px;
+  padding: 10px 0;
 `;
 
 const AddMeaningButton = styled.TouchableOpacity`
@@ -79,6 +81,7 @@ const AddMeaningButton = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-bottom: 300px;
 `;
 
 const AddMeaningButtonText = styled.Text`
@@ -159,6 +162,29 @@ function AddVoca(): ReactElement {
     }
   };
 
+  const renderInputList = (): ReactElement[] => {
+    return meaning.map(
+      (m, index): ReactElement => (
+        <InputWrapper key={`item__${index}`}>
+          <Input
+            value={m}
+            onChangeText={(text) => {
+              setMeaning((prev) => {
+                return [
+                  ...prev.slice(0, index),
+                  text,
+                  ...prev.slice(index + 1),
+                ];
+              });
+            }}
+            placeholder={'뜻을 입력해주세요 :)'}
+            placeholderTextColor={colors.lightGray5}
+          />
+        </InputWrapper>
+      ),
+    );
+  };
+
   return (
     <Container style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
       <Header>
@@ -176,46 +202,29 @@ function AddVoca(): ReactElement {
           )}
         </CompleteButton>
       </Header>
-      <TouchableWithoutFeedback onPress={keyboardDismiss}>
-        <Wrapper>
-          <VocaText>단어</VocaText>
-          <InputWrapper>
-            <Input
-              multiline={true}
-              value={voca}
-              onChangeText={(text) => setVoca(text.toLowerCase())}
-              placeholder={'입력해주세요 :)'}
-              placeholderTextColor={colors.lightGray5}
-            />
-          </InputWrapper>
-          <MeaningText>뜻</MeaningText>
-          {meaning.map(
-            (m, index): ReactElement => (
-              <InputWrapper key={`item__${index}`}>
-                <Input
-                  multiline={true}
-                  value={m}
-                  onChangeText={(text) => {
-                    setMeaning((prev) => {
-                      return [
-                        ...prev.slice(0, index),
-                        text,
-                        ...prev.slice(index + 1),
-                      ];
-                    });
-                  }}
-                  placeholder={'뜻을 입력해주세요 :)'}
-                  placeholderTextColor={colors.lightGray5}
-                />
-              </InputWrapper>
-            ),
-          )}
-          <AddMeaningButton onPress={addMeaningItem}>
-            <SvgPlusVocaListButton />
-            <AddMeaningButtonText>뜻 추가</AddMeaningButtonText>
-          </AddMeaningButton>
-        </Wrapper>
-      </TouchableWithoutFeedback>
+      <KeyboardAwareScrollView>
+        <TouchableWithoutFeedback onPress={keyboardDismiss}>
+          <Wrapper>
+            <VocaText>단어</VocaText>
+            <InputWrapper>
+              <Input
+                multiline={true}
+                value={voca}
+                onChangeText={(text) => setVoca(text.toLowerCase())}
+                placeholder={'입력해주세요 :)'}
+                placeholderTextColor={colors.lightGray5}
+              />
+            </InputWrapper>
+
+            <MeaningText>뜻</MeaningText>
+            {renderInputList()}
+            <AddMeaningButton onPress={addMeaningItem}>
+              <SvgPlusVocaListButton />
+              <AddMeaningButtonText>뜻 추가</AddMeaningButtonText>
+            </AddMeaningButton>
+          </Wrapper>
+        </TouchableWithoutFeedback>
+      </KeyboardAwareScrollView>
     </Container>
   );
 }

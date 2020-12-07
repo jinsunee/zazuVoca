@@ -11,10 +11,12 @@ import {
 import AddItem from '../screen/AddItem';
 import Main from '../screen/Main';
 import Notebook from '../screen/Notebook';
+import { Platform } from 'react-native';
 import React from 'react';
 import SearchVoca from '../screen/SearchVoca';
 import UpdateItem from '../screen/UpdateItem';
-import { colors } from '../../theme';
+
+// import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 
 export type StackParamList = {
   Main: undefined;
@@ -38,10 +40,27 @@ export type StackNavigationProps<
 const Stack = createStackNavigator<StackParamList>();
 
 function MainStackNavigator(): React.ReactElement {
+  const platformAnimation = () => {
+    if (Platform.OS === 'android') {
+      return {
+        ...TransitionPresets.FadeFromBottomAndroid,
+        headerShown: false,
+      };
+    }
+
+    return {
+      headerShown: false,
+      ...TransitionPresets.DefaultTransition,
+    };
+  };
+
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        cardOverlayEnabled: false,
+        cardShadowEnabled: false,
+        cardStyle: { backgroundColor: 'transparent' },
       }}
     >
       <Stack.Screen name="Main" component={Main} />
@@ -53,9 +72,21 @@ function MainStackNavigator(): React.ReactElement {
           ...TransitionPresets.FadeFromBottomAndroid,
         })}
       />
-      <Stack.Screen name="Notebook" component={Notebook} />
-      <Stack.Screen name="AddItem" component={AddItem} />
-      <Stack.Screen name="UpdateItem" component={UpdateItem} />
+      <Stack.Screen
+        name="Notebook"
+        component={Notebook}
+        options={platformAnimation}
+      />
+      <Stack.Screen
+        name="AddItem"
+        component={AddItem}
+        options={platformAnimation}
+      />
+      <Stack.Screen
+        name="UpdateItem"
+        component={UpdateItem}
+        options={platformAnimation}
+      />
     </Stack.Navigator>
   );
 }

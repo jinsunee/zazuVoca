@@ -11,7 +11,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import { StatusBar } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { insertUser } from '../../apis/insert';
 import useNotebooksProvider from '../../providers/notebooksProvider';
 import useUserProvider from '../../providers/userProvider';
@@ -25,7 +24,7 @@ export type RootStackNavigationProps<
   T extends keyof StackParamList = 'MainStack'
 > = StackNavigationProp<StackParamList, T>;
 
-const Stack = createNativeStackNavigator<StackParamList>();
+const Stack = createStackNavigator<StackParamList>();
 
 function RootStackNavigator(): React.ReactElement {
   const { setUser } = useUserProvider();
@@ -57,8 +56,9 @@ function RootStackNavigator(): React.ReactElement {
           if (notebooksResult) {
             setNotebooks(notebooksResult);
           }
+          SplashScreen.hide();
           setTimeout(() => {
-            SplashScreen.hide();
+            // SplashScreen.hide();
             setLoading(false);
           }, 1500);
         }
@@ -107,7 +107,7 @@ function RootStackNavigator(): React.ReactElement {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-          stackAnimation: 'none',
+          animationEnabled: false,
         }}
       >
         {loading ? (
