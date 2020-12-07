@@ -28,6 +28,11 @@
 
 ## DB 구조 및 API
 
-[Backend 구조 - document 기반 nosql](https://www.notion.so/Backend-document-nosql-b7b95b62d22c4e27a9e25a54986a52f4)
-[Frontend 구조 - Redux](https://www.notion.so/Frontend-Redux-7f058abc33f24992ad94fa75e5641251)
-[API](https://www.notion.so/API-188a87cc24314b41888658dd27b2227a)
+- [Backend 구조 - document 기반 nosql](https://www.notion.so/Backend-document-nosql-b7b95b62d22c4e27a9e25a54986a52f4)
+- [Frontend 구조 - Redux](https://www.notion.so/Frontend-Redux-7f058abc33f24992ad94fa75e5641251)
+- [API](https://www.notion.so/API-188a87cc24314b41888658dd27b2227a)
+
+## TodoList
+
+- 소셜 로그인 추가
+- 그룹 기능 추가
