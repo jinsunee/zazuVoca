@@ -16,6 +16,7 @@ import {
 
 import AddNotebookModal from '../shared/AddNotebookModal';
 import AsyncStorage from '@react-native-community/async-storage';
+import DOMParser from 'react-native-html-parser';
 import { NotebookType } from '../../types';
 import SelectVocaListModal from '../shared/SelectVocaListModal';
 import Toast from 'react-native-root-toast';
@@ -185,7 +186,11 @@ function AddVoca(): ReactElement {
 
   const transe = async (input: string): Promise<string> => {
     try {
-      const t = await axios.get(`https://glosbe.com/en/ko/${input}`);
+      // const t = await axios.get(`https://glosbe.com/en/ko/${input}`);
+
+      const t = await axios.get(
+        `https://endic.naver.com/searchAssistDict.nhn?query=${input}`,
+      );
 
       return t.data;
     } catch (error) {
@@ -197,23 +202,16 @@ function AddVoca(): ReactElement {
   const request = async (input: string): Promise<void> => {
     try {
       const data = await transe(input);
-      const resultTag = data.match(
-        /<div class="text-info"><strong class="nobold phr">[(^가-힣ㄱ-ㅎㅏ-ㅣ)]*<\/strong>/g,
-      );
 
-      if (resultTag) {
-        const rtn: string[] = [];
-        for (const r of resultTag) {
-          rtn.push(removeTag(r));
-        }
+      // var DOMParser = require('react-native-html-parser').DOMParser;
+      var doc = new DOMParser.DOMParser().parseFromString(data);
 
-        setInputResults(rtn);
+      const tmp: string[] = [];
+      doc.querySelect('span[class="fnt_k20"] strong').map((item) => {
+        tmp.push(item.childNodes[0].data);
+      });
 
-        return;
-      }
-
-      setInputResults(null);
-      setSelecteResultItems(null);
+      setInputResults(tmp);
     } catch (error) {
       console.log(error);
     }
@@ -263,10 +261,6 @@ function AddVoca(): ReactElement {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const removeTag = (str: string): string => {
-    return str.replace(/(<([^>]+)>)/gi, '');
   };
 
   const fetchNotebookIndex = async () => {
