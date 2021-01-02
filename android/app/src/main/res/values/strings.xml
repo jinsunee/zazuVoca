@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">jajuvoca</string>
+    <string name="facebook_app_id">445160893531386</string> 
+    <string name="fb_login_protocol_scheme">fb445160893531386</string>
 </resources>
