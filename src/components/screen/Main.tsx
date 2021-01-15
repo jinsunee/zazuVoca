@@ -1,10 +1,12 @@
 import { FlatList, Keyboard } from 'react-native';
 import React, { ReactElement, useState } from 'react';
-import { SvgLogo, SvgNoUser, SvgPlusMain, SvgSearch } from '../../utils/Icons';
+import { SvgLogo, SvgMenu, SvgPlusMain, SvgSearch } from '../../utils/Icons';
 
 import AddNotebookModal from '../shared/AddNotebookModal';
+import AuthModal from '../shared/AuthModal';
 import NotebookItem from '../shared/NotebookItem';
 import { Pressable } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import { colors } from '../../theme';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
@@ -18,14 +20,12 @@ const Container = styled.View`
 
 const Header = styled.View`
   width: 100%;
-`;
-
-const HeaderUserWrapper = styled.View`
-  flex-direction: row;
-  justify-content: flex-end;
+  padding: 20px 0;
 `;
 
 const UserButton = styled.TouchableOpacity`
+  position: absolute;
+  right: 0;
   padding: 20px;
   justify-content: center;
   align-items: center;
@@ -34,7 +34,6 @@ const UserButton = styled.TouchableOpacity`
 const HeaderLogoWrapper = styled.View`
   justify-content: center;
   align-items: center;
-  padding: 30px 0;
 `;
 
 const GoToAddVocaButton = styled(Pressable)`
@@ -55,7 +54,6 @@ const GoToAddVocaText = styled.Text`
 const FlatListHeader = styled.View`
   flex-direction: row;
   justify-content: flex-end;
-  margin-top: 30px;
 `;
 
 const FlatListHeaderButton = styled.TouchableOpacity`
@@ -88,9 +86,20 @@ function Main(): ReactElement {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
+  const currentUser = auth().currentUser;
+
   const { notebooks } = useNotebooksProvider();
 
-  const [shownAddNotebook, setShownAddNotebook] = useState<boolean>(false);
+  const [shownModal, setShownModal] = useState<boolean>(false);
+
+  const pressMenuButton = (): void => {
+    if (currentUser?.isAnonymous || !currentUser) {
+      setShownModal(true);
+      return;
+    }
+
+    goToOther('Auth');
+  };
 
   const goToOther = (where: string, item?: Object): void => {
     if (navigation) {
@@ -104,17 +113,25 @@ function Main(): ReactElement {
 
   const pressCancel = (): void => {
     Keyboard.dismiss();
-    setShownAddNotebook(false);
+    setShownModal(false);
+  };
+
+  const renderModal = (): ReactElement => {
+    if (currentUser?.isAnonymous || !currentUser) {
+      return <AuthModal showModal={shownModal} cancel={pressCancel} />;
+    }
+    return <AddNotebookModal showModal={shownModal} cancel={pressCancel} />;
   };
 
   return (
     <Container style={{ paddingTop: insets.top }}>
       <Header>
-        <HeaderUserWrapper>
-          <UserButton onPress={() => goToOther('Auth')}>
-            <SvgNoUser />
-          </UserButton>
-        </HeaderUserWrapper>
+        <HeaderLogoWrapper>
+          <SvgLogo width={100} height={20} />
+        </HeaderLogoWrapper>
+        <UserButton onPress={pressMenuButton}>
+          <SvgMenu fill={colors.light} />
+        </UserButton>
       </Header>
       <FlatList
         data={notebooks}
@@ -138,17 +155,12 @@ function Main(): ReactElement {
         ListHeaderComponent={(): ReactElement => {
           return (
             <>
-              <HeaderLogoWrapper>
-                <SvgLogo />
-              </HeaderLogoWrapper>
               <GoToAddVocaButton onPress={(): void => goToOther('SearchVoca')}>
                 <SvgSearch />
                 <GoToAddVocaText>단어 검색하고 저장하기</GoToAddVocaText>
               </GoToAddVocaButton>
               <FlatListHeader>
-                <FlatListHeaderButton
-                  onPress={(): void => setShownAddNotebook(true)}
-                >
+                <FlatListHeaderButton onPress={(): void => setShownModal(true)}>
                   <SvgPlusMain />
                   <FlatLIstHeaderAddButtonText>
                     단어장 추가
@@ -169,7 +181,7 @@ function Main(): ReactElement {
           paddingBottom: insets.bottom + 20,
         }}
       />
-      <AddNotebookModal showModal={shownAddNotebook} cancel={pressCancel} />
+      {renderModal()}
     </Container>
   );
 }

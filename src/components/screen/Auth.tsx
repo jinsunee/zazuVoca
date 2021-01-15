@@ -1,6 +1,8 @@
-import React, { ReactElement } from 'react';
+import { ActivityIndicator, Pressable } from 'react-native';
+import React, { ReactElement, useState } from 'react';
+import { SvgApple, SvgBack } from '../../utils/Icons';
 
-import { SvgBack } from '../../utils/Icons';
+import auth from '@react-native-firebase/auth';
 import { colors } from '../../theme';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
@@ -13,42 +15,50 @@ const Container = styled.View`
 
 const Header = styled.View`
   width: 100%;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
 `;
 
 const BackButton = styled.TouchableOpacity`
-  position: absolute;
-  left: 0;
   padding: 15px;
   justify-content: center;
 `;
 
-const VocaTitleText = styled.Text`
-  font-size: 16px;
-  font-weight: 500;
-  color: ${colors.light};
-  margin-right: 5px;
-`;
-
 const Wrapper = styled.View`
   flex: 1;
-  padding-top: 100px;
+  padding: 15px;
+`;
+
+const UserWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const IDWrapper = styled.View`
+  width: 230px;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
 `;
 
-const TitleText = styled.Text`
-  font-weight: bold;
-  font-size: 25px;
+const IDText = styled.Text`
+  font-weight: 500;
+  font-size: 14px;
   color: ${colors.light};
-  margin-bottom: 10px;
+  padding: 0 10px;
 `;
 
-const ContentText = styled.Text`
+const SignOutButton = styled(Pressable)`
+  width: 80px;
+  height: 40px;
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: ${colors.light};
+  justify-content: center;
+  align-items: center;
+`;
+
+const SignOutButtonText = styled.Text`
   font-weight: 500;
-  font-size: 20px;
+  font-size: 16px;
   color: ${colors.light};
 `;
 
@@ -56,18 +66,9 @@ function Page(): ReactElement {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
-  const renderHeader = (): ReactElement => {
-    return (
-      <Header>
-        <BackButton onPress={goToBack}>
-          <SvgBack fill={colors.light} />
-        </BackButton>
-        <>
-          <VocaTitleText>로그인</VocaTitleText>
-        </>
-      </Header>
-    );
-  };
+  const currentUser = auth().currentUser;
+
+  const [loadingSignOut, setLoadingSignOut] = useState<boolean>(false);
 
   const goToBack = (): void => {
     if (navigation) {
@@ -75,14 +76,40 @@ function Page(): ReactElement {
     }
   };
 
+  const signOut = async () => {
+    setLoadingSignOut(true);
+    await auth().signOut();
+    goToBack();
+  };
+
+  const renderHeader = (): ReactElement => {
+    return (
+      <Header>
+        <BackButton onPress={goToBack}>
+          <SvgBack fill={colors.light} />
+        </BackButton>
+      </Header>
+    );
+  };
+
   return (
     <Container style={{ paddingTop: insets.top }}>
       {renderHeader()}
       <Wrapper>
-        <>
-          <TitleText>게스트 로그인</TitleText>
-          <ContentText>로그인 기능이 추가 될 예정입니다 :)</ContentText>
-        </>
+        <UserWrapper>
+          {/* <TitleText>게스트 로그인</TitleText> */}
+          <IDWrapper>
+            <SvgApple fill={colors.light} width={20} height={20} />
+            <IDText>{currentUser?.email}</IDText>
+          </IDWrapper>
+          <SignOutButton onPress={signOut}>
+            {loadingSignOut ? (
+              <ActivityIndicator size={12} color={colors.light} />
+            ) : (
+              <SignOutButtonText>로그아웃</SignOutButtonText>
+            )}
+          </SignOutButton>
+        </UserWrapper>
       </Wrapper>
     </Container>
   );

@@ -18,6 +18,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* jajuVocaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* jajuVocaTests.m */; };
 		6E3A91F2257738F40014ACD8 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E3A91F0257738F40014ACD8 /* SplashScreen.storyboard */; };
 		6E84D00B25761AC6009BF0BC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E84D00A25761AC6009BF0BC /* GoogleService-Info.plist */; };
+		6EAA7DC725A0BEC600838C14 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAA7DC625A0BEC600838C14 /* File.swift */; };
 		786B83FC17CAD8E63B73FD34 /* libPods-jajuVoca-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93BA817C58ABC06C3EE12EA4 /* libPods-jajuVoca-tvOS.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F42FB772405D7BF687623E0D /* libPods-jajuVoca-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DE281F1552675BAF0860863 /* libPods-jajuVoca-tvOSTests.a */; };
@@ -61,6 +62,9 @@
 		6E3A91F0257738F40014ACD8 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		6E84D00A25761AC6009BF0BC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6E84D0992576448E009BF0BC /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6EAA7DC525A0BEC500838C14 /* jajuVoca-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "jajuVoca-Bridging-Header.h"; sourceTree = "<group>"; };
+		6EAA7DC625A0BEC600838C14 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		6EDCDF6525B154D100245EDB /* jajuVoca.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = jajuVoca.entitlements; path = jajuVoca/jajuVoca.entitlements; sourceTree = "<group>"; };
 		72CD02D88DB0DC8DE01C95DF /* Pods-jajuVoca-jajuVocaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jajuVoca-jajuVocaTests.release.xcconfig"; path = "Target Support Files/Pods-jajuVoca-jajuVocaTests/Pods-jajuVoca-jajuVocaTests.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = jajuVoca/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		898A87D252E02B7E4242F043 /* Pods-jajuVoca-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jajuVoca-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-jajuVoca-tvOSTests/Pods-jajuVoca-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 		13B07FAE1A68108700A75B9A /* jajuVoca */ = {
 			isa = PBXGroup;
 			children = (
+				6EDCDF6525B154D100245EDB /* jajuVoca.entitlements */,
 				6E84D0992576448E009BF0BC /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -138,6 +143,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				6EAA7DC625A0BEC600838C14 /* File.swift */,
+				6EAA7DC525A0BEC500838C14 /* jajuVoca-Bridging-Header.h */,
 			);
 			name = jajuVoca;
 			sourceTree = "<group>";
@@ -303,7 +310,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = HR7RM9RAMK;
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1230;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -485,6 +492,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-jajuVoca-jajuVocaTests/Pods-jajuVoca-jajuVocaTests-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -506,6 +514,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -537,6 +546,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-jajuVoca/Pods-jajuVoca-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -558,6 +568,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -658,6 +669,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				6EAA7DC725A0BEC600838C14 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -699,6 +711,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F67AB31F4A37E13CF91CB2A3 /* Pods-jajuVoca-jajuVocaTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -723,6 +736,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 72CD02D88DB0DC8DE01C95DF /* Pods-jajuVoca-jajuVocaTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -746,6 +760,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = jajuVoca/jajuVoca.entitlements;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = HR7RM9RAMK;
 				ENABLE_BITCODE = NO;
@@ -822,6 +837,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jinsun.jajuVoca;
 				PRODUCT_NAME = jajuVoca;
+				SWIFT_OBJC_BRIDGING_HEADER = "jajuVoca-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -834,6 +850,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = jajuVoca/jajuVoca.entitlements;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = HR7RM9RAMK;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -909,6 +926,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jinsun.jajuVoca;
 				PRODUCT_NAME = jajuVoca;
+				SWIFT_OBJC_BRIDGING_HEADER = "jajuVoca-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

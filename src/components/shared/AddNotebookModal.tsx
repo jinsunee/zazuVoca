@@ -112,7 +112,7 @@ interface Props {
   setNotebookIndex?: (index: number, notebook: NotebookType) => void;
 }
 
-function EditCollectionModal(props: Props): ReactElement {
+function AddNotebookModal(props: Props): ReactElement {
   const { showModal, cancel, setNotebookIndex } = props;
   const { notebooks, addNotebook } = useNotebooksProvider();
   const { user } = useUserProvider();
@@ -212,4 +212,4 @@ function EditCollectionModal(props: Props): ReactElement {
   );
 }
 
-export default EditCollectionModal;
+export default AddNotebookModal;

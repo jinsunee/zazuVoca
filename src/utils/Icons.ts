@@ -1,8 +1,10 @@
+import svgApple from '../../assets/icons/svgApple';
 import svgBack from '../../assets/icons/svgBack.svg';
 import svgChangeLayout from '../../assets/icons/svgChangeLayout.svg';
 import svgCheck from '../../assets/icons/check.svg';
 import svgCheck1 from '../../assets/icons/svgCheck.svg';
 import svgClose from '../../assets/icons/svgClose.svg';
+import svgFacebook from '../../assets/icons/svgFacebook';
 import svgLogo from '../../assets/icons/svgLogo.svg';
 import svgMenu from '../../assets/icons/svgMenu.svg';
 import svgModalBar from '../../assets/icons/svgModalBar.svg';
@@ -35,6 +37,8 @@ export const SvgPlusMain = svgPlusMain;
 export const SvgMore = svgMore;
 export const SvgChangeLayout = svgChangeLayout;
 export const SvgPlusVocaListButton = svgPlusVocaListButton;
+export const SvgApple = svgApple;
+export const SvgFacebook = svgFacebook;
 
 export default [
   SvgBack,
@@ -55,4 +59,6 @@ export default [
   SvgMore,
   SvgPlusVocaListButton,
   SvgChangeLayout,
+  SvgApple,
+  SvgFacebook,
 ];

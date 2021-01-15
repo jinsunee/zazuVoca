@@ -36,10 +36,8 @@ function RootStackNavigator(): React.ReactElement {
     const userResult = await insertUser();
 
     await requestFetchUser(userResult);
-    setTimeout(() => {
-      SplashScreen.hide();
-      setLoading(false);
-    }, 1500);
+    SplashScreen.hide();
+    setLoading(false);
   };
 
   const fetchFirst = async () => {
@@ -57,10 +55,7 @@ function RootStackNavigator(): React.ReactElement {
             setNotebooks(notebooksResult);
           }
           SplashScreen.hide();
-          setTimeout(() => {
-            // SplashScreen.hide();
-            setLoading(false);
-          }, 1500);
+          setLoading(false);
         }
       });
     } catch (error) {
