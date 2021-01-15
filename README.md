@@ -22,7 +22,8 @@
 
 - typescript
 - react-native
-- react-native-firebase
+- react-native-firebase/firestore
+- react-native-firebase/auth
 - styled-components
 - redux
 
@@ -35,4 +36,11 @@
 ## TodoList
 
 - 소셜 로그인 추가
+
+  - [x] apple
+  - [ ] facebook
+  - [ ] kakao
+  - [ ] naver
+  - [ ] google
+
 - 그룹 기능 추가
