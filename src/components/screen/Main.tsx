@@ -1,5 +1,5 @@
 import { FlatList, Keyboard } from 'react-native';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { SvgLogo, SvgMenu, SvgPlusMain, SvgSearch } from '../../utils/Icons';
 
 import AddNotebookModal from '../shared/AddNotebookModal';
@@ -92,7 +92,12 @@ function Main(): ReactElement {
 
   const [shownModal, setShownModal] = useState<boolean>(false);
 
+  useEffect(() => {
+    console.log(currentUser);
+  }, []);
+
   const pressMenuButton = (): void => {
+    console.log(currentUser);
     if (currentUser?.isAnonymous || !currentUser) {
       setShownModal(true);
       return;

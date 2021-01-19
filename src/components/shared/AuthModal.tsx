@@ -14,6 +14,7 @@ import Modal from 'react-native-modal';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 import auth from '@react-native-firebase/auth';
 import { colors } from '../../theme';
+import { confirmUserUID } from '../../apis/fetch';
 import { screenHeight } from '../../utils/common';
 import styled from 'styled-components/native';
 import useUserProvider from '../../providers/userProvider';
@@ -99,12 +100,21 @@ async function onAppleButtonPress() {
     // 4). use the created `AppleAuthProvider` credential to start a Firebase auth request,
     //     in this example `signInWithCredential` is used, but you could also call `linkWithCredential`
     //     to link the account to an existing user
-    // const currentUser = auth().currentUser;
-    // if (currentUser) {
-    //   const userCredential = await currentUser.linkWithCredential(
-    //     appleCredential,
-    //   );
+    const currentUser = auth().currentUser;
+    if (currentUser) {
+      // confirm whether user is already signIn or not
+      const confirmUserWhetherSignIn = await confirmUserUID(currentUser.uid);
 
+      if (!confirmUserWhetherSignIn) {
+        const userCredential = await currentUser.linkWithCredential(
+          appleCredential,
+        );
+
+        return;
+      }
+
+      await auth().signInWithCredential(appleCredential);
+    }
     //   const user = userCredential.user;
     //   console.log('Anonymous account successfully upgraded', user);
     // }

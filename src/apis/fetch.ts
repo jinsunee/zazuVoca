@@ -52,7 +52,9 @@ export const fetchNotebooks = async (
         tmpNotebooks.push({
           notebookUID: q.id,
           title: data.title,
-          date: `${createdAt.getFullYear()}.${createdAt.getMonth()}.${createdAt.getDay()}`,
+          date: `${createdAt.getFullYear()}.${
+            createdAt.getMonth() + 1
+          }.${createdAt.getDay()}`,
         });
       }
     });
@@ -90,5 +92,20 @@ export const fetchItems = async (
     return tmpItems;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const confirmUserUID = async (userUID: string): Promise<boolean> => {
+  try {
+    const query = await db.collection('users').doc(userUID).get();
+
+    if (query.data()) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 };

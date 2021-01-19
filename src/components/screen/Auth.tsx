@@ -79,7 +79,9 @@ function Page(): ReactElement {
   const signOut = async () => {
     setLoadingSignOut(true);
     await auth().signOut();
-    goToBack();
+    setTimeout(() => {
+      goToBack();
+    }, 2000);
   };
 
   const renderHeader = (): ReactElement => {
