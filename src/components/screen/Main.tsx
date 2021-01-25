@@ -37,6 +37,7 @@ const HeaderLogoWrapper = styled.View`
 `;
 
 const GoToAddVocaButton = styled(Pressable)`
+  border-radius: 10px;
   border-width: 1px;
   border-color: ${colors.primary};
   margin: 0 20px;

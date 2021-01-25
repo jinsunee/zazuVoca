@@ -206,12 +206,15 @@ function AddVoca(): ReactElement {
       // var DOMParser = require('react-native-html-parser').DOMParser;
       var doc = new DOMParser.DOMParser().parseFromString(data);
 
-      const tmp: string[] = [];
+      const set = new Set<string>();
       doc.querySelect('span[class="fnt_k20"] strong').map((item) => {
-        tmp.push(item.childNodes[0].data);
+        set.add(item.childNodes[0].data);
       });
 
-      setInputResults(tmp);
+      const tmp: string[] = [];
+      set.forEach((s) => tmp.push(s));
+
+      setInputResults(tmp.sort());
     } catch (error) {
       console.log(error);
     }

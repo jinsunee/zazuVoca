@@ -43,6 +43,7 @@
     "react-native-svg-transformer": "^0.14.3",
     "react-native-vector-icons": "^7.1.0",
     "react-native-view-overflow": "^0.0.5",
+    "react-native-webview": "^11.0.3",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
