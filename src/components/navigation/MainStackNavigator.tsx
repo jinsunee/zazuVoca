@@ -10,6 +10,7 @@ import {
 
 import AddItem from '../screen/AddItem';
 import Auth from '../screen/Auth';
+import AuthMail from '../screen/AuthMail';
 import Main from '../screen/Main';
 import Notebook from '../screen/Notebook';
 import { Platform } from 'react-native';
@@ -33,6 +34,7 @@ export type StackParamList = {
     item: ItemType;
   };
   Auth: undefined;
+  AuthMail: undefined;
 };
 
 export type StackNavigationProps<
@@ -94,7 +96,14 @@ function MainStackNavigator(): React.ReactElement {
         component={Auth}
         options={(): StackNavigationOptions => ({
           headerShown: false,
-          ...TransitionPresets.SlideFromRightIOS,
+          ...TransitionPresets.ModalSlideFromBottomIOS,
+        })}
+      />
+      <Stack.Screen
+        name="AuthMail"
+        component={AuthMail}
+        options={(): StackNavigationOptions => ({
+          headerShown: false,
         })}
       />
     </Stack.Navigator>

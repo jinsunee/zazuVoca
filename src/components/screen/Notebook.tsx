@@ -9,6 +9,7 @@ import {
 } from '../../utils/Icons';
 
 import { ActivityIndicator } from 'react-native-paper';
+import AsyncStorage from '@react-native-community/async-storage';
 import Card from '../shared/Card';
 import { ItemType } from '../../types';
 import { StackParamList } from '../navigation/MainStackNavigator';
@@ -179,24 +180,36 @@ function Notebook(): ReactElement {
     }
   };
 
+  const requestItemfromAsyncStorage = async () => {
+    try {
+      setLoading(true);
+      const result = await AsyncStorage.getItem('vocaList');
+
+      console.log(result);
+
+      if (result) {
+        const tmp = JSON.parse(result);
+
+        const newItems = tmp.map((t: ItemType) => ({
+          itemUID: t.itemUID,
+          front: t.front,
+          back: t.back,
+        }));
+
+        setItems(newItems);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const index = notebooks.findIndex((n) => n.notebookUID === notebookUID);
-
-    if (index === -1) {
-      goToBack();
-      return;
-    }
-
-    setNotebookTitle(notebooks[index].title);
-
-    if (index !== -1 && !notebooks[index].items) {
+    if (user) {
       requestItems();
-      return;
+    } else {
+      requestItemfromAsyncStorage();
     }
-
-    setItems(notebooks[index].items);
-    setLoading(false);
-    setCurrentCardIndex(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notebooks]);
 
@@ -232,7 +245,12 @@ function Notebook(): ReactElement {
   };
 
   const pressMore = (): void => {
-    setShownUpdateVocaList(true);
+    if (user) {
+      setShownUpdateVocaList(true);
+      return;
+    }
+
+    navigation.navigate('Auth');
   };
 
   const getTitle = (titleString: string): string => {
@@ -337,7 +355,11 @@ function Notebook(): ReactElement {
           style={{ paddingTop: 10, paddingBottom: insets.bottom + 20 }}
         >
           <SvgChangeLayout />
-          <BottomButtonText>리스트로 보기</BottomButtonText>
+          <BottomButtonText>
+            {layout === LayoutOption.PLAIN_LIST_VERTICAL
+              ? '카드로보기'
+              : '리스트로보기'}
+          </BottomButtonText>
         </BottomButton>
         <BottomButton
           onPress={goToAddItem}

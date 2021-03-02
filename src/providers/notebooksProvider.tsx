@@ -91,16 +91,18 @@ type NotebooksAction =
   | ReturnType<typeof updateItemAction>
   | ReturnType<typeof removeItemAction>;
 
-const intialState: NotebookType[] = [
-  {
-    notebookUID: '123',
-    title: '임시 단어장이에요. 제목을 수정해보세요 :)',
-    date: '20.11.14',
-  },
-];
+// const intialState: NotebookType[] = [
+//   {
+//     notebookUID: '123',
+//     title: '임시 단어장이에요. 제목을 수정해보세요 :)',
+//     date: '20.11.14',
+//   },
+// ];
+
+const intialState: NotebookType[] | null = null;
 
 export function notebooksReducer(
-  state: NotebookType[] = intialState,
+  state: NotebookType[] | null = intialState,
   action: NotebooksAction,
 ) {
   switch (action.type) {

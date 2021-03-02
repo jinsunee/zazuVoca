@@ -1,4 +1,4 @@
-import {Dimensions} from 'react-native';
+import { Dimensions } from 'react-native';
 
 export const screenWidth = Math.round(Dimensions.get('window').width);
 export const screenHeight = Math.round(Dimensions.get('window').height);
@@ -27,4 +27,22 @@ export const dataForSearching = (userName: string): string[] => {
   }
 
   return userNameForSearching;
+};
+
+export const dateToString = (inputDate: Date): string => {
+  if (inputDate) {
+    const year = inputDate?.getFullYear(),
+      month =
+        inputDate?.getMonth() + 1 < 10
+          ? '0' + (inputDate?.getMonth() + 1)
+          : inputDate?.getMonth() + 1,
+      date =
+        inputDate?.getDate() < 10
+          ? '0' + inputDate?.getDate()
+          : inputDate?.getDate();
+
+    return `${year}.${month}.${date}`;
+  }
+
+  return '';
 };

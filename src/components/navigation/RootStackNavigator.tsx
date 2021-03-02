@@ -3,16 +3,14 @@ import {
   StackNavigationProp,
   createStackNavigator,
 } from '@react-navigation/stack';
-import { fetchNotebooks, fetchUser } from '../../apis/fetch';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
 import Loading from '../screen/Loading';
 import MainStack from '../navigation/MainStackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import { StatusBar } from 'react-native';
-import auth from '@react-native-firebase/auth';
-import { insertUser } from '../../apis/insert';
-import useNotebooksProvider from '../../providers/notebooksProvider';
+import { fetchUser } from '../../apis/fetch';
 import useUserProvider from '../../providers/userProvider';
 
 export type StackParamList = {
@@ -27,69 +25,38 @@ export type RootStackNavigationProps<
 const Stack = createStackNavigator<StackParamList>();
 
 function RootStackNavigator(): React.ReactElement {
-  const { setUser } = useUserProvider();
-  const { setNotebooks } = useNotebooksProvider();
+  const { setUser, resetUser } = useUserProvider();
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  const first = async () => {
-    const userResult = await insertUser();
-
-    await requestFetchUser(userResult);
-    SplashScreen.hide();
-    setLoading(false);
-  };
-
-  const fetchFirst = async () => {
-    try {
-      auth().onAuthStateChanged(async (fireUser) => {
-        if (fireUser) {
-          const userResult = await fetchUser(fireUser.uid);
-          const notebooksResult = await fetchNotebooks(fireUser.uid);
-
-          if (userResult) {
-            setUser(userResult);
-          }
-
-          if (notebooksResult) {
-            setNotebooks(notebooksResult);
-          }
-          SplashScreen.hide();
-          setLoading(false);
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const requestFetchUser = async (userUID: string) => {
     const userResult = await fetchUser(userUID);
-    const notebooksResult = await fetchNotebooks(userUID);
 
     if (userResult) {
       setUser(userResult);
     }
-
-    if (notebooksResult) {
-      setNotebooks(notebooksResult);
-    }
   };
 
+  async function onAuthStateChanged(
+    firebaseUser: FirebaseAuthTypes.User | null,
+  ): Promise<void> {
+    if (!firebaseUser) {
+      resetUser();
+    } else {
+      requestFetchUser(firebaseUser.uid);
+    }
+    setLoading(false);
+  }
+
   useEffect(() => {
-    fetchFirst();
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 2000);
+
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    const currentUser = auth().currentUser;
-
-    if (!currentUser) {
-      first();
-      return;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth().currentUser]);
 
   return (
     <NavigationContainer>

@@ -4,6 +4,7 @@ import { NotebookType } from '../../types';
 import { SvgRectangle } from '../../utils/Icons';
 import { ViewStyle } from 'react-native';
 import { colors } from '../../theme';
+import { dateToString } from '../../utils/common';
 import { screenWidth } from '../../utils/common';
 import styled from 'styled-components/native';
 
@@ -54,6 +55,7 @@ interface Props {
 
 function Shared(props: Props): ReactElement {
   const { containerStyle, itemContainerStyle, item, pressItem } = props;
+
   return (
     <Container style={containerStyle}>
       <VocaListItem style={itemContainerStyle} onPress={pressItem}>
@@ -61,7 +63,7 @@ function Shared(props: Props): ReactElement {
           <VocaListTitleText>{item.title}</VocaListTitleText>
         </VocaListTitle>
         <VocaListDate>
-          <VocaListDateText>{item.date}</VocaListDateText>
+          <VocaListDateText>{dateToString(item.date)}</VocaListDateText>
         </VocaListDate>
         <RectangleWrapper>
           <SvgRectangle />

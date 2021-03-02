@@ -20,19 +20,18 @@ type UserAction =
   | ReturnType<typeof setUserAction>
   | ReturnType<typeof resetUserAction>;
 
-const intialState: User = {
-  userUID: '',
-  userName: '',
-  profileImage: '',
-};
+const initialState: User | null = null;
 
-export function userReducer(state: User = intialState, action: UserAction) {
+export function userReducer(
+  state: User | null = initialState,
+  action: UserAction,
+) {
   switch (action.type) {
     case SET_USER: {
       return action.payload;
     }
     case RESET_USER: {
-      return intialState;
+      return initialState;
     }
     default:
       return state;

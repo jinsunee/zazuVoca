@@ -20,13 +20,15 @@ export interface User {
   userUID: string;
   userName: string;
   profileImage: string;
+  email?: string;
+  emailVerified?: boolean;
 }
 
 export interface NotebookType {
   notebookUID: string;
   title: string;
   // tag: string[]; // default: 'english'
-  date: string; // 20.11.23
+  date: Date; // 20.11.23
   items?: ItemType[];
 }
 

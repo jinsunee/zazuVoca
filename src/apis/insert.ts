@@ -1,11 +1,41 @@
 import { ItemType, NotebookType } from '../types';
 
+import { appleAuth } from '@invertase/react-native-apple-authentication';
 import auth from '@react-native-firebase/auth';
 import { fetchUserSize } from './fetch';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 
 const db = firestore();
+
+export async function signUpForEmail(
+  email: string,
+  password: string,
+): Promise<boolean> {
+  try {
+    const credential = firebase.auth.EmailAuthProvider.credential(
+      email,
+      password,
+    );
+
+    const currentUser = auth().currentUser;
+
+    if (currentUser) {
+      const usercred = await currentUser.linkWithCredential(credential);
+
+      if (usercred.user) {
+        await currentUser.sendEmailVerification();
+
+        return true;
+      }
+    }
+
+    return false;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
 
 export const insertUser = async (): Promise<string> => {
   try {
@@ -115,3 +145,28 @@ export const insertNotebook = async (
     console.log(error);
   }
 };
+
+export async function pressAppleButton() {
+  const appleAuthRequestResponse = await appleAuth.performRequest({
+    requestedOperation: appleAuth.Operation.LOGIN,
+    requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+  });
+
+  const { identityToken, nonce } = appleAuthRequestResponse;
+
+  if (identityToken) {
+    const appleCredential = auth.AppleAuthProvider.credential(
+      identityToken,
+      nonce,
+    );
+
+    const userCredential = await auth().signInWithCredential(appleCredential);
+
+    console.warn(
+      `Firebase authenticated via Apple, UID: ${userCredential.user.uid}`,
+    );
+  } else {
+  }
+}
+
+export { appleAuth };

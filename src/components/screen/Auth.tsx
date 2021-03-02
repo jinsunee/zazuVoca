@@ -1,12 +1,99 @@
-import { ActivityIndicator, Pressable } from 'react-native';
-import React, { ReactElement, useState } from 'react';
-import { SvgApple, SvgBack } from '../../utils/Icons';
+import { ActivityIndicator, Pressable, View } from 'react-native';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { SvgApple, SvgClose, SvgSmile } from '../../utils/Icons';
+import { appleAuth, pressAppleButton } from '../../apis/insert';
 
-import auth from '@react-native-firebase/auth';
 import { colors } from '../../theme';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+function Page(): ReactElement {
+  const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
+
+  // const currentUser = auth().currentUser;
+  const [loadingApple, setLoadingApple] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (appleAuth.isSupported) {
+      return appleAuth.onCredentialRevoked(async () => {
+        console.warn(
+          'If this function executes, User Credentials have been Revoked',
+        );
+      });
+    }
+  }, []);
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
+  const pressApple = async () => {
+    setLoadingApple(true);
+    await pressAppleButton();
+    setLoadingApple(false);
+  };
+
+  const renderAppleButton = (): ReactElement | null => {
+    if (!appleAuth.isSupported) {
+      return null;
+    }
+
+    if (loadingApple) {
+      return (
+        <SocialButton style={{ backgroundColor: colors.light }}>
+          <ActivityIndicator color={colors.dark} size={16} />
+        </SocialButton>
+      );
+    }
+    return (
+      <SocialButton
+        style={{ backgroundColor: colors.light }}
+        onPress={pressApple}
+      >
+        <SvgApple fill={colors.dark} />
+        <ButtonText>Apple로 계속하기</ButtonText>
+      </SocialButton>
+    );
+  };
+
+  const renderEmailButton = (): ReactElement => {
+    const pressButton = () => {
+      navigation.navigate('AuthMail');
+    };
+
+    return (
+      <EmailButton onPress={pressButton}>
+        <ButtonText style={{ color: colors.light }}>
+          이메일로 계속하기
+        </ButtonText>
+      </EmailButton>
+    );
+  };
+
+  return (
+    <Container style={{ paddingTop: insets.top }}>
+      <Container>
+        <Header>
+          <CloseButton onPress={goBack}>
+            <SvgClose />
+          </CloseButton>
+          <HeaderTitle>로그인 및 회원가입</HeaderTitle>
+        </Header>
+        <RowWrapper>
+          <View>
+            <InfoText>단어장을 추가하고</InfoText>
+            <InfoText>안전하게 보관할 수 있어요! :)</InfoText>
+          </View>
+          <SvgSmile />
+        </RowWrapper>
+        {renderEmailButton()}
+        {renderAppleButton()}
+      </Container>
+    </Container>
+  );
+}
 
 const Container = styled.View`
   flex: 1;
@@ -15,106 +102,64 @@ const Container = styled.View`
 
 const Header = styled.View`
   width: 100%;
-`;
-
-const BackButton = styled.TouchableOpacity`
-  padding: 15px;
+  flex-direction: row;
   justify-content: center;
+  align-items: center;
+  padding: 20px;
 `;
 
-const Wrapper = styled.View`
-  flex: 1;
-  padding: 15px;
+const CloseButton = styled.TouchableOpacity`
+  position: absolute;
+  left: 20px;
+  top: 20px;
 `;
 
-const UserWrapper = styled.View`
+const HeaderTitle = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+  color: ${colors.lightGray6};
+`;
+
+const RowWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
-`;
-
-const IDWrapper = styled.View`
-  width: 230px;
-  flex-direction: row;
-  flex-wrap: nowrap;
   align-items: center;
+  padding: 20px 0 20px 20px;
+  margin-bottom: 50px;
 `;
 
-const IDText = styled.Text`
+const InfoText = styled.Text`
+  color: ${colors.lightGray6};
   font-weight: 500;
-  font-size: 14px;
-  color: ${colors.light};
-  padding: 0 10px;
+  font-size: 20px;
 `;
 
-const SignOutButton = styled(Pressable)`
-  width: 80px;
-  height: 40px;
+const SocialButton = styled(Pressable)`
   border-radius: 10px;
-  border-width: 1px;
-  border-color: ${colors.light};
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  height: 50px;
+  margin: 0 20px 15px 20px;
+  background-color: ${colors.light};
 `;
 
-const SignOutButtonText = styled.Text`
-  font-weight: 500;
+const EmailButton = styled(Pressable)`
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  margin: 0 20px 15px 20px;
+  border-width: 1px;
+  border-color: ${colors.light};
+  background-color: transparent;
+`;
+
+const ButtonText = styled.Text`
+  color: ${colors.dark};
   font-size: 16px;
-  color: ${colors.light};
+  font-weight: bold;
+  margin-left: 10px;
 `;
-
-function Page(): ReactElement {
-  const insets = useSafeAreaInsets();
-  const navigation = useNavigation();
-
-  const currentUser = auth().currentUser;
-
-  const [loadingSignOut, setLoadingSignOut] = useState<boolean>(false);
-
-  const goToBack = (): void => {
-    if (navigation) {
-      navigation.goBack();
-    }
-  };
-
-  const signOut = async () => {
-    setLoadingSignOut(true);
-    await auth().signOut();
-    setTimeout(() => {
-      goToBack();
-    }, 2000);
-  };
-
-  const renderHeader = (): ReactElement => {
-    return (
-      <Header>
-        <BackButton onPress={goToBack}>
-          <SvgBack fill={colors.light} />
-        </BackButton>
-      </Header>
-    );
-  };
-
-  return (
-    <Container style={{ paddingTop: insets.top }}>
-      {renderHeader()}
-      <Wrapper>
-        <UserWrapper>
-          {/* <TitleText>게스트 로그인</TitleText> */}
-          <IDWrapper>
-            <SvgApple fill={colors.light} width={20} height={20} />
-            <IDText>{currentUser?.email}</IDText>
-          </IDWrapper>
-          <SignOutButton onPress={signOut}>
-            {loadingSignOut ? (
-              <ActivityIndicator size={12} color={colors.light} />
-            ) : (
-              <SignOutButtonText>로그아웃</SignOutButtonText>
-            )}
-          </SignOutButton>
-        </UserWrapper>
-      </Wrapper>
-    </Container>
-  );
-}
 
 export default Page;
